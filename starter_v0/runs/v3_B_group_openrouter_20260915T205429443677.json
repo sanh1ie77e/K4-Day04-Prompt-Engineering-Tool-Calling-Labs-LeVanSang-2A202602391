@@ -1,0 +1,442 @@
+{
+  "run_id": "v3_B_group_openrouter_20260915T205429443677",
+  "version": "v3",
+  "artifact_version": "v3+pa4bb50ed4c67+tdb5527e61768",
+  "prompt_hash": "a4bb50ed4c678686c10e7ce03fd56b1911809c68291eae99bfd25e6fb1c00c9d",
+  "tools_hash": "db5527e61768dd954169a0f4280b82e4cf2219780d285f751b53a368245afe77",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "D:\\Vin\\LAB4 chiều\\K4-Day04-Prompt-Engineering-Tool-Calling-Labs\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\Vin\\LAB4 chiều\\K4-Day04-Prompt-Engineering-Tool-Calling-Labs\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "10 team evaluation cases: 5 single-turn and 5 multi-turn.",
+  "generated_at": "2026-09-15T20:54:29",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 0,
+    "provider_error_cases": 10,
+    "passed_cases": 0,
+    "case_accuracy": 0.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_two_shared_services",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {},
+      "input": "Kiểm tra cả SSO và printing ở production.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "printing",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G02_howto_not_diagnostics",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {},
+      "input": "Máy tôi có mã LT-240 nhưng đừng kiểm tra máy. Chỉ tìm bài hướng dẫn kết nối Wi-Fi trên Windows.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "wifi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G03_missing_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {},
+      "input": "Tra tài khoản và danh sách máy được cấp của trưởng nhóm Marketing. Tôi chưa cung cấp mã nhân viên.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G04_security_policy",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {},
+      "input": "Tìm chính sách nội bộ về việc gửi dữ liệu sang công cụ bên ngoài.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "external_tools"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_ticket_from_issue",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {},
+      "input": "Nhờ tạo ticket mức low: máy in PR-404 thường xuyên kẹt giấy.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_correct_environment",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {},
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra SSO production."
+        },
+        {
+          "role": "user",
+          "content": "Tôi nhầm môi trường, chuyển sang staging."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra cả SSO lẫn email ở môi trường vừa sửa."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "email",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G07_narrow_device_scope",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {},
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tổng thể LT-240 và DT-031."
+        },
+        {
+          "role": "user",
+          "content": "Bỏ LT-240 khỏi yêu cầu."
+        },
+        {
+          "role": "user",
+          "content": "Với máy còn lại, chỉ kiểm tra software."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "software"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G08_cancel_ticket_find_guide",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {},
+      "input": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi kết nối máy in PR-404 mức medium."
+        },
+        {
+          "role": "user",
+          "content": "Hủy việc tạo ticket."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tìm hướng dẫn khắc phục kết nối máy in."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "printing"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_change_confirmed_asset",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {},
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo ticket lỗi phần mềm trên DT-031 mức medium."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, máy bị lỗi thực ra là DT-087."
+        },
+        {
+          "role": "user",
+          "content": "Cho tôi xem lại thông tin và hỏi xác nhận trước khi tạo."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G10_change_report_template",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {},
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi có findings: Wi-Fi chập chờn, kết nối mạng bị gián đoạn. Soạn báo cáo technical."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang brief, đặt tên là 'Tong hop ket noi'."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ format findings tôi đã đưa, không tra cứu hay kiểm tra lại."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "brief",
+              "incident_title": "Tong hop ket noi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    }
+  ]
+}

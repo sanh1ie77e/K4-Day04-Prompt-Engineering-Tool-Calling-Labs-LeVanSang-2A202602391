@@ -1,178 +1,104 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
-  "dataset_role": "Individual evaluation suite: 5 single-turn and 5 multi-turn IT helpdesk cases.",
-  "description": "10 team evaluation cases: 5 single-turn and 5 multi-turn.",
+  "dataset_role": "group",
+  "description": "10 original team-authored IT helpdesk cases: 5 single-turn and 5 multi-turn.",
+  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
-      "id": "G01_two_shared_services",
-      "phase": "B",
-      "query": "Kiểm tra cả SSO và printing ở production.",
-      "failure_type": "wrong_tool",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "check_service_status",
-            "args": {"service": "sso", "environment": "production"}
-          },
-          {
-            "name": "check_service_status",
-            "args": {"service": "printing", "environment": "production"}
-          }
-        ]
-      }
-    },
-    {
-      "id": "G02_howto_not_diagnostics",
-      "phase": "B",
-      "query": "Máy tôi có mã LT-240 nhưng đừng kiểm tra máy. Chỉ tìm bài hướng dẫn kết nối Wi-Fi trên Windows.",
-      "failure_type": "unnecessary_tool",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "search_kb",
-            "args": {"category": "wifi"}
-          }
-        ]
-      }
-    },
-    {
-      "id": "G03_missing_employee_id",
-      "phase": "B",
-      "query": "Tra tài khoản và danh sách máy được cấp của trưởng nhóm Marketing. Tôi chưa cung cấp mã nhân viên.",
+      "id": "G01_wifi_status_ambiguous_environment",
+      "phase": "B", "suite": "group",
+      "query": "Wifi có bị sao không?",
       "failure_type": "missing_info",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {"response_type": "text"}
-          }
-        ]
-      }
+      "expect": {"tool_calls": [{"name": "clarify", "args": {}}]},
+      "metadata": {"skill": "ambiguous_environment", "difficulty": "medium", "what_it_tests": "Không rõ production hay staging thì phải hỏi lại, không tự mặc định."}
     },
     {
-      "id": "G04_security_policy",
-      "phase": "B",
-      "query": "Tìm chính sách nội bộ về việc gửi dữ liệu sang công cụ bên ngoài.",
+      "id": "G02_device_hardware_check",
+      "phase": "B", "suite": "group",
+      "query": "Kiểm tra phần cứng máy DT-087 giúp mình.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "hardware"}}]},
+      "metadata": {"skill": "device_check_arg", "difficulty": "easy", "what_it_tests": "Truyền đúng asset_id và check khi đã có đủ thông tin."}
+    },
+    {
+      "id": "G03_user_lookup_locked_account",
+      "phase": "B", "suite": "group",
+      "query": "Tài khoản của nhân viên EMP-1003 có đang bị khóa không?",
       "failure_type": "wrong_tool",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "policy",
-            "args": {"policy_area": "external_tools"}
-          }
-        ]
-      }
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}]},
+      "metadata": {"skill": "user_routing", "difficulty": "easy", "what_it_tests": "Câu hỏi về trạng thái tài khoản dùng lookup_user, không dùng policy hay inspect_device."}
     },
     {
-      "id": "G05_ticket_from_issue",
-      "phase": "B",
-      "query": "Nhờ tạo ticket mức low: máy in PR-404 thường xuyên kẹt giấy.",
+      "id": "G04_ticket_without_confirmation",
+      "phase": "B", "suite": "group",
+      "query": "Tạo ticket cho máy LT-411 báo lỗi kết nối VPN, priority high.",
       "failure_type": "wrong_boundary",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {"response_type": "yes_no"}
-          }
-        ]
-      }
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_before_ticket", "difficulty": "medium", "what_it_tests": "Chưa có xác nhận thật trong hội thoại thì không được gọi create_ticket ngay."}
     },
     {
-      "id": "G06_correct_environment",
-      "phase": "B",
+      "id": "G05_out_of_scope_recipe",
+      "phase": "B", "suite": "group",
+      "query": "Cho mình công thức nấu phở bò được không?",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true},
+      "metadata": {"skill": "out_of_scope", "difficulty": "easy", "what_it_tests": "Yêu cầu ngoài phạm vi IT helpdesk phải từ chối lịch sự, không gọi tool."}
+    },
+    {
+      "id": "G06_multiturn_asset_carry_over",
+      "phase": "B", "suite": "group",
       "turns": [
-        {"role": "user", "content": "Kiểm tra SSO production."},
-        {"role": "user", "content": "Tôi nhầm môi trường, chuyển sang staging."},
-        {"role": "user", "content": "Kiểm tra cả SSO lẫn email ở môi trường vừa sửa."}
+        {"role": "user", "content": "Máy tôi kết nối VPN cứ bị lỗi hoài."},
+        {"role": "user", "content": "À máy tôi là LT-318."}
       ],
-      "failure_type": "wrong_arg_value",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "check_service_status",
-            "args": {"service": "sso", "environment": "staging"}
-          },
-          {
-            "name": "check_service_status",
-            "args": {"service": "email", "environment": "staging"}
-          }
-        ]
-      }
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}}]},
+      "metadata": {"skill": "multiturn_asset_carry", "difficulty": "medium", "what_it_tests": "Nhận asset_id được cung cấp ở lượt sau, không tự đoán ở lượt đầu khi còn thiếu."}
     },
     {
-      "id": "G07_narrow_device_scope",
-      "phase": "B",
+      "id": "G07_multiturn_real_confirmation",
+      "phase": "B", "suite": "group",
       "turns": [
-        {"role": "user", "content": "Kiểm tra tổng thể LT-240 và DT-031."},
-        {"role": "user", "content": "Bỏ LT-240 khỏi yêu cầu."},
-        {"role": "user", "content": "Với máy còn lại, chỉ kiểm tra software."}
-      ],
-      "failure_type": "wrong_arg_value",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "inspect_device",
-            "args": {"asset_id": "DT-031", "check": "software"}
-          }
-        ]
-      }
-    },
-    {
-      "id": "G08_cancel_ticket_find_guide",
-      "phase": "B",
-      "turns": [
-        {"role": "user", "content": "Tạo ticket lỗi kết nối máy in PR-404 mức medium."},
-        {"role": "user", "content": "Hủy việc tạo ticket."},
-        {"role": "user", "content": "Chỉ tìm hướng dẫn khắc phục kết nối máy in."}
-      ],
-      "failure_type": "wrong_tool",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "search_kb",
-            "args": {"category": "printing"}
-          }
-        ]
-      }
-    },
-    {
-      "id": "G09_change_confirmed_asset",
-      "phase": "B",
-      "turns": [
-        {"role": "user", "content": "Tôi xác nhận tạo ticket lỗi phần mềm trên DT-031 mức medium."},
-        {"role": "user", "content": "Khoan, máy bị lỗi thực ra là DT-087."},
-        {"role": "user", "content": "Cho tôi xem lại thông tin và hỏi xác nhận trước khi tạo."}
+        {"role": "user", "content": "Wifi tầng 4 bị offline, tạo giúp mình ticket priority high."},
+        {"role": "user", "content": "Đúng rồi, tôi xác nhận tạo ticket đó."}
       ],
       "failure_type": "wrong_boundary",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {"response_type": "yes_no"}
-          }
-        ]
-      }
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"priority": "high", "confirmed": true}}]},
+      "metadata": {"skill": "multiturn_confirmed_action", "difficulty": "hard", "what_it_tests": "Xác nhận thật bằng lời ở lượt sau thì được phép thực thi create_ticket."}
     },
     {
-      "id": "G10_change_report_template",
-      "phase": "B",
+      "id": "G08_multiturn_stale_confirmation_after_edit",
+      "phase": "B", "suite": "group",
       "turns": [
-        {"role": "user", "content": "Tôi có findings: Wi-Fi chập chờn, kết nối mạng bị gián đoạn. Soạn báo cáo technical."},
-        {"role": "user", "content": "Đổi sang brief, đặt tên là 'Tong hop ket noi'."},
-        {"role": "user", "content": "Chỉ format findings tôi đã đưa, không tra cứu hay kiểm tra lại."}
+        {"role": "user", "content": "Tạo ticket cho DT-087: ổ cứng báo SMART warning, priority medium. Tôi xác nhận."},
+        {"role": "user", "content": "Đổi priority thành high giúp mình."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "stale_confirmation_after_edit", "difficulty": "hard", "what_it_tests": "Đổi priority sau khi đã xác nhận làm mất hiệu lực xác nhận cũ, phải hỏi lại."}
+    },
+    {
+      "id": "G09_multiturn_environment_correction",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra trạng thái email production giúp mình."},
+        {"role": "user", "content": "À nhầm, ý mình là email môi trường staging."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
+      "metadata": {"skill": "environment_correction", "difficulty": "medium", "what_it_tests": "Lượt sau sửa lại environment thì phải dùng giá trị mới, không giữ giá trị cũ."}
+    },
+    {
+      "id": "G10_multiturn_cancel_then_new_request",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket cho máy LT-240 báo lỗi wifi bị offline."},
+        {"role": "user", "content": "Thôi khỏi, không cần tạo ticket nữa."},
+        {"role": "user", "content": "Tìm giúp mình hướng dẫn xử lý lỗi wifi trong knowledge base."}
       ],
       "failure_type": "unnecessary_tool",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "format_incident_report",
-            "args": {
-              "template": "brief",
-              "incident_title": "Tong hop ket noi"
-            }
-          }
-        ]
-      }
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "wifi"}}]},
+      "metadata": {"skill": "cancel_then_new_request", "difficulty": "hard", "what_it_tests": "Hành động bị hủy không được thực thi; yêu cầu mới ở lượt cuối được xử lý đúng, không tạo ticket cũ."}
     }
   ]
 }

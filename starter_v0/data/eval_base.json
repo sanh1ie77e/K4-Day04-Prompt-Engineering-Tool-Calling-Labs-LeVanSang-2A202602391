@@ -1,7 +1,7 @@
 {
   "dataset_id": "day04_v3_helpdesk_base",
   "dataset_role": "base",
-  "description": "Fixed core eval for the IT Helpdesk Agent. Do not edit prompts, expected behavior, or arguments. Only synchronize a tool name here if the team intentionally renames that tool everywhere.",
+  "description": "Fixed core eval for the IT Helpdesk Agent. Keep built-in tool names and all supplied cases unchanged, including prompts, expected behavior, and arguments. Test team-built bonus tools with team-authored cases.",
   "cases": [
     {
       "id": "H01_service_status_routing", "phase": "B", "suite": "base",
