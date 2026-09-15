@@ -27,3 +27,12 @@ starter_v0/tests/
 Thumbs.db
 .idea/
 .vscode/
+
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+tickets/

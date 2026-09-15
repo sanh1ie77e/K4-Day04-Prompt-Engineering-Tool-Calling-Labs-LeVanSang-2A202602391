@@ -1,7 +1,178 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
-  "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "dataset_role": "Individual evaluation suite: 5 single-turn and 5 multi-turn IT helpdesk cases.",
+  "description": "10 team evaluation cases: 5 single-turn and 5 multi-turn.",
+  "cases": [
+    {
+      "id": "G01_two_shared_services",
+      "phase": "B",
+      "query": "Kiểm tra cả SSO và printing ở production.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {"service": "sso", "environment": "production"}
+          },
+          {
+            "name": "check_service_status",
+            "args": {"service": "printing", "environment": "production"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G02_howto_not_diagnostics",
+      "phase": "B",
+      "query": "Máy tôi có mã LT-240 nhưng đừng kiểm tra máy. Chỉ tìm bài hướng dẫn kết nối Wi-Fi trên Windows.",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {"category": "wifi"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G03_missing_employee_id",
+      "phase": "B",
+      "query": "Tra tài khoản và danh sách máy được cấp của trưởng nhóm Marketing. Tôi chưa cung cấp mã nhân viên.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "text"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G04_security_policy",
+      "phase": "B",
+      "query": "Tìm chính sách nội bộ về việc gửi dữ liệu sang công cụ bên ngoài.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {"policy_area": "external_tools"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G05_ticket_from_issue",
+      "phase": "B",
+      "query": "Nhờ tạo ticket mức low: máy in PR-404 thường xuyên kẹt giấy.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "yes_no"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G06_correct_environment",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra SSO production."},
+        {"role": "user", "content": "Tôi nhầm môi trường, chuyển sang staging."},
+        {"role": "user", "content": "Kiểm tra cả SSO lẫn email ở môi trường vừa sửa."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {"service": "sso", "environment": "staging"}
+          },
+          {
+            "name": "check_service_status",
+            "args": {"service": "email", "environment": "staging"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G07_narrow_device_scope",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra tổng thể LT-240 và DT-031."},
+        {"role": "user", "content": "Bỏ LT-240 khỏi yêu cầu."},
+        {"role": "user", "content": "Với máy còn lại, chỉ kiểm tra software."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {"asset_id": "DT-031", "check": "software"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G08_cancel_ticket_find_guide",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi kết nối máy in PR-404 mức medium."},
+        {"role": "user", "content": "Hủy việc tạo ticket."},
+        {"role": "user", "content": "Chỉ tìm hướng dẫn khắc phục kết nối máy in."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {"category": "printing"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G09_change_confirmed_asset",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tôi xác nhận tạo ticket lỗi phần mềm trên DT-031 mức medium."},
+        {"role": "user", "content": "Khoan, máy bị lỗi thực ra là DT-087."},
+        {"role": "user", "content": "Cho tôi xem lại thông tin và hỏi xác nhận trước khi tạo."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "yes_no"}
+          }
+        ]
+      }
+    },
+    {
+      "id": "G10_change_report_template",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tôi có findings: Wi-Fi chập chờn, kết nối mạng bị gián đoạn. Soạn báo cáo technical."},
+        {"role": "user", "content": "Đổi sang brief, đặt tên là 'Tong hop ket noi'."},
+        {"role": "user", "content": "Chỉ format findings tôi đã đưa, không tra cứu hay kiểm tra lại."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "brief",
+              "incident_title": "Tong hop ket noi"
+            }
+          }
+        ]
+      }
+    }
+  ]
 }
