@@ -3,7 +3,7 @@
 ## Team
 
 - Team: Cá nhân
-- Members: Phạm Văn Hoàng Anh Tú — 2A202602507
+- Members: Lê Văn Sang — 2A202602391
 - Provider/model: openai / gpt-4o-mini
 
 # PHẦN A — Giới thiệu agent
@@ -224,7 +224,7 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 
 ## C2. Self-reflection của từng thành viên
 
-### Phạm Văn Hoàng Anh Tú — 2A202602507
+### Lê Văn Sang — 2A202602391
 
 - **Vai trò/phần việc được nhận:** Tự thực hiện toàn bộ core lab một mình —
   cải tiến `system_prompt.md`/`tools.yaml` qua 4 version, viết 10 case cho
@@ -278,4 +278,4 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 
 **URL repository chung dùng để nộp:**
 
-> URL: https://github.com/tubepvhat1604-bot/K4-L3B-Day04-PhamVanHoangAnhTu-2A202602507
+> URL: https://github.com/tubepvhat1604-bot/K4-L3B-Day04-PhamVanHoangAnhTu-2A202602391
